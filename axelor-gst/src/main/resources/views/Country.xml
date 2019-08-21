@@ -1,0 +1,15 @@
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid name="gst-country-grid" title="Countries" model="com.axelor.apps.base.db.Country">
+		<field name="name" x-bind="{{name|uppercase}}"/>
+	</grid>
+
+	<form name="gst-country-form" title="Country" model="com.axelor.apps.base.db.Country">
+		<panel title="Overview" colSpan="6">
+			<field name="name" x-bind="{{name|uppercase}}"/>
+		</panel>
+	</form>
+
+</object-views>

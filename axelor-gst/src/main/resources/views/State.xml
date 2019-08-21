@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<grid name="gst-state-grid" title="States" model="com.axelor.apps.base.db.State">
+		<field name="name" />
+		<field name="country" />
+	</grid>
+
+	<form name="gst-state-form" title="States" model="com.axelor.apps.base.db.State"
+		onSave="validate">
+		<panel title="Overview">
+			<field name="name" title="State" />
+			<field name="country" widget="ref-text" canNew="true"
+				target="com.axelor.apps.base.db.Country" />
+		</panel>
+	</form>
+
+	<action-attrs name="action-gst-attrs-country">
+		<attribute name="value" for="country" expr="eval: country.get('name')" />
+	</action-attrs>
+
+</object-views>

@@ -224,6 +224,10 @@ public class PurchaseOrderStockServiceImpl implements PurchaseOrderStockService 
           purchaseOrderLineServiceSupplychainImpl.computeUndeliveredQty(purchaseOrderLine);
 
       if (qty.signum() > 0 && !existActiveStockMoveForPurchaseOrderLine(purchaseOrderLine)) {
+        /*
+         * stockMove.getStockMoveLineList().add(this.createStockMoveLine(stockMove,
+         * qualityStockMove, purchaseOrderLine, qty));
+         */
         this.createStockMoveLine(stockMove, qualityStockMove, purchaseOrderLine, qty);
       }
     }

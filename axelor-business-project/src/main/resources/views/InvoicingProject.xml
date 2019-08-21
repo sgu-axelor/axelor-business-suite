@@ -82,12 +82,10 @@
 							   if="__config__.app.isApp('production') &amp;&amp; __config__.app.getApp('production').getManageBusinessProduction()"
 							   name="manufOrderSetPanel"/>
 				
-				<panel-related field="teamTaskSet" colSpan="12" canNew="false"
-							   canEdit="false" canSelect="false"
-							   form-view="team-task-form" grid-view="business-project-team-task-grid"
-							   showIf="teamTaskSet &amp;&amp; teamTaskSet.length &gt; 0"
-							   readonlyIf="invoice" 
-							   name="teamTaskSetPanel"/>
+				<panel-related field="teamTaskSet" colSpan="12" canNew="false" canEdit="false"
+	canSelect="false" form-view="team-task-form" grid-view="business-project-team-task-grid"
+	showIf="teamTaskSet &amp;&amp; teamTaskSet.length &gt; 0" readonlyIf="invoice"
+	name="teamTaskSetPanel" />
 			</panel>
 
 			<panel name="configurationsPanel" title="Configurations" readonlyIf="invoice">

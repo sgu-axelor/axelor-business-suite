@@ -77,8 +77,8 @@
 		<view type="form" name="job-application-form"/>
 		<view type="grid" name="job-application-grid"/>
 		<domain>self.jobPosition.id = :_jobPositionId</domain>
-		<context name="_jobPositionId" expr="eval:id"/>
-		<context name="_responsibleId" expr="eval:employee.id"/>
+		<context name="_jobPositionId" expr="eval: id"/>
+		<context name="_responsibleId" expr="eval: employee?.id"/>
 	</action-view>
 	
 	<action-record name="action-job-position-record-status-draft" model="com.axelor.apps.talent.db.JobPosition">

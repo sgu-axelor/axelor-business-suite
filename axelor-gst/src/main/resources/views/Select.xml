@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.1.xsd">
+  
+  
+  <selection name="axelor.gst.partner.contact.type.select">
+    <option value="Primary">Primary</option>
+    <option value="Secondary">Secondary</option>
+    <option value="Other">Other</option>
+  </selection>
+  
+  <selection name="axelor.gst.partner.bankaccount.type.select">
+    <option value="Current">Current</option>
+    <option value="Saving">Saving</option>
+   </selection>
+  
+</object-views>

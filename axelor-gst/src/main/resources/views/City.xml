@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.1.xsd">
+
+	<grid name="gst-city-grid" title="Cities" model="com.axelor.apps.base.db.City">
+		<field name="name" />
+		<field name="state" />
+		<field name="country" />
+	</grid>
+
+	<form name="city-form" title="City" model="com.axelor.apps.base.db.City" width="large"
+		id="gst-city-form">
+		<panel name="mainPanel">
+			<field name="name" />
+			<field name="artmin" colSpan="2" />
+			<field name="zip" colSpan="4" />
+			<field name="inseeCode" />
+			<field name="hasZipOnRight" />
+		</panel>
+		<panel name="localizationPanel" title="Localization">
+			<field name="state" widget="ref-text" canNew="true" canEdit="flase"
+				target="com.axelor.apps.base.db.State" domain="self.country = :country"
+				if="__config__.app.getApp('gst')" />
+			<field name="country" form-view="country-form" grid-view="country-grid" />
+			<field name="department" form-view="department-form" grid-view="department-grid" />
+			<field name="canton" form-view="canton-form" grid-view="canton-grid" />
+		</panel>
+		<panel name="demographyPanel" title="Demography">
+			<field name="nbInhCommune" />
+		</panel>
+	</form>
+
+</object-views>
