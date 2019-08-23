@@ -188,7 +188,6 @@ public class InvoiceLineSupplychainService extends InvoiceLineServiceImpl {
       sequence = invoice.getInvoiceLineList().size();
       invoiceLine.setSequence(sequence);
     }
-
     if (appSupplychainService.getAppSupplychain().getActive()
         && appSaleService.getAppSale().getProductPackMgt()
         && invoiceLine.getProduct() != null

@@ -73,7 +73,7 @@
         <panel-tabs name="mainPanelTab" hideIf="typeSelect == 1">
             <panel name="informationsPanel" title="Information">
                 <field name="product" canEdit="false"
-                    onChange="action-group-account-invoice-line-product-onchange,action-gst-invoiceline-attrs-set-gst-defaults"
+                    onChange="action-group-account-invoice-line-product-onchange"
                     onSelect="action-invoice-line-attrs-set-product-domain-onselect"
                     form-view="product-form" grid-view="product-grid" />
                 <!-- HSBN -->
@@ -121,19 +121,19 @@
                 <field name="invoice" hidden="true" />
                 <field name="companyExTaxTotal" hidden="true" />
                 <field name="companyInTaxTotal" hidden="true" />
+                <!-- GstRate and GSTs -->
+                <panel title="Other Taxes" if="__config__.app.isApp('gst')"
+                    showIf="product != null" if-module="axelor-gst">
+                    <field name="gstRate" colSpan="3" readonly="true" />
+                    <field name="igst" colSpan="3" readonly="true" />
+                    <field name="cgst" colSpan="3" readonly="true" />
+                    <field name="sgst" colSpan="3" readonly="true" />
+                </panel>
+                <!-- GstRate and GSTs -->
                 <panel name="descriptionPanel" title="Description" colSpan="12">
                     <field name="description" showTitle="false" colSpan="12" widget="html"
                         x-lite="true" />
                 </panel>
-                <!-- GstRate and GSTs -->
-                <panel title="Other Taxes" if="__config__.app.isApp('gst')"
-                    if-module="axelor-gst">
-                    <field name="gstRate" colSpan="3" readonly="true" />
-                    <field name="igst" colSpan="3" readonly="true" />
-                    <field name="csgt" colSpan="3" readonly="true" />
-                    <field name="sgst" colSpan="3" readonly="true" />
-                </panel>
-                <!-- GstRate and GSTs -->
             </panel>
             <panel name="packPanel" title="Pack lines" showIf="typeSelect == 2"
                 readonlyIf="packPriceSelect == 0">
@@ -272,20 +272,15 @@
                 </panel>
                 <!-- GstRate and GSTs -->
                 <panel title="Other Taxes" if="__config__.app.isApp('gst')"
+                    showIf="product != null &amp;&amp; product.gstRate &gt; 0 "
                     if-module="axelor-gst">
                     <field name="gstRate" colSpan="3" readonly="true" />
                     <field name="igst" colSpan="3" readonly="true" />
-                    <field name="csgt" colSpan="3" readonly="true" />
+                    <field name="cgst" colSpan="3" readonly="true" />
                     <field name="sgst" colSpan="3" readonly="true" />
                 </panel>
                 <!-- GstRate and GSTs -->
             </panel>
         </panel-tabs>
     </form>
-    
-    <action-attrs name="action-gst-invoiceline-attrs-set-gst-defaults" if-module="axelor-gst">
-        <attribute name="value" for="gstRate" expr="eval: product?.gstRate"/>
-        <attribute name="value" for="hsbn" expr="eval: product?.hsbn"/>
-    </action-attrs>
-    
 </object-views>
