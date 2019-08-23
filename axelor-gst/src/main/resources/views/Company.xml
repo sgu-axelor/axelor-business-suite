@@ -29,9 +29,9 @@
 				<field name="code" x-bind="{{code|unaccent|uppercase}}" />
 				<field name="parent" form-view="company-form" grid-view="company-grid" />
 				<field name="address" colSpan="12" canNew="true" form-view="address-form" grid-view="address-grid" />
-                <field name="gstin" colSpan="12"/>
+                <field name="gstin" colSpan="12" showIf="__config__.app.isApp('gst')"/>
 			</panel>
-			<panel name="contactSBSPanel" colSpan="12" title="Contact Details">
+			<panel name="contactSBSPanel" colSpan="12" title="Contact Details" if="__config__.app.isApp('gst')" if-module="axelor-gst">
 				<field name="contact" showTitle="false" colSpan="12" domain="self.isContact = false" form-view="partner-contact-form"
 					grid-view="partner-contact-grid">
 					<editor x-viewer="true">

@@ -10,13 +10,13 @@
     </toolbar>
     <field name="partnerSeq" width="120" />
     <!-- Contact Type Select -->
-    <field name="contactType"/>
+    <field name="contactType" />
     <field name="simpleFullName" />
     <field name="fixedPhone" />
     <field name="mobilePhone" />
     <field name="emailAddress.address" placeholder="whatever@example.com" title="Email" />
     <!--Secondary Email -->
-    <field name="secEmailAddress.address" placeholder="whatever@example.com" title="Sec Email" />
+    <field name="secEmailAddress.address" placeholder="whatever@example.com" title="Sec Email" if="__config__.app.isApp('gst')"/>
     <!--Secondary Email -->
     <field name="mainPartner.simpleFullName" title="Main company" />
     <field name="jobTitle" />
@@ -156,6 +156,9 @@
               <field name="city" canNew="true" onChange="action-address-change-city" form-view="city-form" grid-view="city-grid" />
               <field name="addressL6" x-bind="{{addressL6|uppercase}}" required="true" />
               <field name="addressL7Country" required="true" form-view="country-form" grid-view="country-grid" />
+<!--               Adding State -->
+              <field name="state" form-view="gst-state-form" grid-view="gst-state-grid" if="__config__.app.isApp('gst')" />
+              <!--               Adding State -->
             </editor>
           </field>
         </panel>
@@ -174,7 +177,8 @@
         </panel>
         <panel name="generalContactDetailsPanel" title="General contact details" colSpan="12">
           <!-- Contact Type Select -->
-          <field name="contactType" selection="axelor.gst.partner.contact.type.select"></field>
+          <field name="contactType" selection="axelor.gst.partner.contact.type.select" if="__config__.app.isApp('gst')"/>
+           <!-- Contact Type Select -->
           <field name="fixedPhone" colSpan="3" placeholder="+33100000000" pattern="^\+?([\s()-.]*\d){7,}$"
             onChange="action-partner-method-normalize-fixedPhone" />
           <field name="fax" colSpan="3" placeholder="+33000000000" pattern="^\+?([\s()-.]*\d){7,}$"
@@ -188,7 +192,7 @@
             </editor>
           </field>
           <!-- Secondary Email -->
-          <field name="secEmailAddress" canSelect="false" colSpan="6" form-view="email-address-simple-form" x-show-icons="false">
+          <field name="secEmailAddress" canSelect="false" colSpan="6" form-view="email-address-simple-form" x-show-icons="false" if="__config__.app.isApp('gst')">
             <editor x-show-titles="false">
               <field name="address" colSpan="12" placeholder="whatever@example.com"
                 pattern="^[a-z0-9A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})$" />
@@ -204,7 +208,7 @@
             <field name="source" canEdit="false" colSpan="6" widget="SuggestBox" form-view="source-form" grid-view="source-grid" />
             <field name="department" colSpan="6" hideIf="partnerTypeSelect== 2" />
             <!-- GSTIN -->
-            <field name="gstin" />
+            <field name="gstin" if="__config__.app.isApp('gst')"/>
           </panel>
           <panel name="otherPartnerDetailsPanel">
             <field name="saleTurnover" hideIf="partnerTypeSelect== 2" />
@@ -392,7 +396,7 @@
         <field name="jobTitle" />
         <field name="reportsTo" domain="self.isContact = true" />
         <!-- Contact Type Select -->
-          <field name="contactType" selection="axelor.gst.partner.contact.type.select"></field>
+        <field name="contactType" selection="axelor.gst.partner.contact.type.select"></field>
         <field name="fixedPhone" placeholder="+33100000000" pattern="^\+?([\s()-.]*\d){7,}$"
           onChange="action-partner-method-normalize-fixedPhone" />
         <field name="mobilePhone" placeholder="+33100000000" pattern="^\+?([\s()-.]*\d){7,}$"
@@ -404,14 +408,15 @@
               colSpan="12" />
           </editor>
         </field>
-<!--         Secondary Email -->
-        <field name="secEmailAddress" canSelect="false" form-view="email-address-simple-form" x-show-icons="false">
+        <!-- Secondary Email -->
+        <field name="secEmailAddress" canSelect="false" form-view="email-address-simple-form" x-show-icons="false" if="__config__.app.isApp('gst')">
           <editor x-show-titles="false">
             <field name="address" placeholder="whatever@example.com"
               pattern="^[a-z0-9A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9A-ZáàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ!#$%&amp;'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})$"
               colSpan="12" />
           </editor>
         </field>
+<!--         Secondary email -->
         <field name="fax" placeholder="+33000000000" pattern="^\+?([\s()-.]*\d){7,}$" onChange="action-partner-method-normalize-fax" />
         <field name="mainAddress" canNew="true" form-view="address-form" grid-view="address-grid" colSpan="12" />
         <field name="timeSlot" colSpan="12" />

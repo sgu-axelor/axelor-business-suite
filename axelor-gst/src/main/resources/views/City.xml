@@ -5,14 +5,14 @@
 
 	<grid name="gst-city-grid" title="Cities" model="com.axelor.apps.base.db.City">
 		<field name="name" />
-		<field name="state" />
+		<field name="state" if="__config__.app.isApp('gst')"/>
 		<field name="country" />
 	</grid>
 
 	<form name="city-form" title="City" model="com.axelor.apps.base.db.City" width="large"
 		id="gst-city-form">
 		<panel name="mainPanel">
-			<field name="name" />
+			<field name="name"/>
 			<field name="artmin" colSpan="2" />
 			<field name="zip" colSpan="4" />
 			<field name="inseeCode" />

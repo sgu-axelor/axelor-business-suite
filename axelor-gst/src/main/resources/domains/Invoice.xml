@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<domain-models xmlns="http://axelor.com/xml/ns/domain-models"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.1.xsd">
+
+  <module name="account" package="com.axelor.apps.account.db" />
+
+  <entity sequential="true" name="Invoice" lang="java">
+    <boolean name="useInvoiceAddAsShippingAdd" default="true" title="Use Invoice Address as Shipping Address"/>
+    <many-to-one name="shippingAddress" ref="com.axelor.apps.base.db.Address" title="Shipping Address" />
+    <integer name="priority" max="10" min="0" title="Priority"/>
+    <decimal name="netIgst" title="Net Igst"/>
+    <decimal name="netCgst" title="Net Cgst"/>
+    <decimal name="netSgst" title="Net Sgst"/>
+  </entity>
+</domain-models>

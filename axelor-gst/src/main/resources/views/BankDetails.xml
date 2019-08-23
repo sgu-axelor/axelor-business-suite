@@ -11,7 +11,7 @@
 		<field name="ownerName"/>
 		<field name="bankAddress"/>
 		<field name="iban"/>
-        <field name="ifsc"/>
+        <field name="ifsc" if="__config__.app.isApp('gst')"/>
 		<field name="bank.code"/>
         <field name="active"/>
 	</grid>
@@ -43,8 +43,8 @@
 			<field name="ibanBic" readonly="true" x-bind="{{iban + ' ' + bank.code}}"/>
 		</panel>
 		<panel name="bbanPanel" title="BBAN" hideIf="bank.country.alpha2Code != 'FR'">
-            <field name="accountType"  selection="axelor.gst.partner.bankaccount.type.select" colSpan="6"/>
-            <field name="ifsc" colSpan="6"/>
+            <field name="accountType"  selection="axelor.gst.partner.bankaccount.type.select" colSpan="6" if="__config__.app.isApp('gst')"/>
+            <field name="ifsc" colSpan="6" if="__config__.app.isApp('gst')"/>
 			<field name="bankCode" colSpan="3" />
 			<field name="sortCode" colSpan="3"/>
 			<field name="accountNbr" colSpan="3"/>

@@ -9,7 +9,7 @@
 	</grid>
 
 	<form name="gst-state-form" title="States" model="com.axelor.apps.base.db.State"
-		onSave="validate">
+		onSave="validate" >
 		<panel title="Overview">
 			<field name="name" title="State" />
 			<field name="country" widget="ref-text" canNew="true"
