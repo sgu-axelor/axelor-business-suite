@@ -6,6 +6,6 @@
 
   <entity name="Product" lang="java">
     <string name="hsbn" title="HSBN"/>
-    <decimal name="gstRate" title="Gst Rate"/>
+    <decimal name="gstRate" title="Gst Rate" max="1" min="0"/>
   </entity>
 </domain-models>

@@ -34,17 +34,6 @@ public class GstAccountManagementServiceImpl extends AccountManagementServiceAcc
       return null;
     }
 
-    /*    for (Integer i = accountManagements.size()-1; i >=0 ; i--) {
-      if (accountManagements.get(i).getCompany().equals(company)) {
-        if (accountManagements.get(i).getSaleTax().getCode().equals(GSTCODE)) {
-          return accountManagements.get(i);
-        }
-        if (i == 0) {
-          return accountManagements.get(i);
-        }
-      }
-    }*/
-
     for (AccountManagement accountManagement : accountManagements) {
       if (accountManagement.getCompany().equals(company)) {
         if (accountManagement.getSaleTax().getCode().equals(GSTCODE)) {

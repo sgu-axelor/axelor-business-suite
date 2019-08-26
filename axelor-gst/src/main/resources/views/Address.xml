@@ -110,6 +110,6 @@
     <field name="addressL7Country" expr="eval: city?.country" if="city" />
     <field name="zip" expr="eval: city?.zip" />
     <field name="street" expr="eval: null" />
-    <field name="state" expr="eval: city?.state" if="__config__.app.isApp('gst') &amp;&amp; city.state"/>
+    <field name="state" expr="eval: __repo__(State).all().filter('self.name = ' + city.state).fetchOne()" if="__config__.app.isApp('gst') &amp;&amp; city.state"/>
   </action-record>
 </object-views>
