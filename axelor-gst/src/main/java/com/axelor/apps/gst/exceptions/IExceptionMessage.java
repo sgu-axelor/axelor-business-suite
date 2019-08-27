@@ -17,8 +17,6 @@
  */
 package com.axelor.apps.gst.exceptions;
 
-import com.google.inject.Inject;
-
 /**
  * Interface of Exceptions.
  *
@@ -26,7 +24,10 @@ import com.google.inject.Inject;
  */
 public interface IExceptionMessage{
 
-  @Inject
   public static final String ACCOUNT_MANAGEMENT_3 = /*$$(*/
       "GST Tax configuration is missing for Product: %s (company: %s). So we are using Product GstRate" /*)*/;
+  public static final String Gst_Address_Message_1 = /*$$(*/
+      "Address is Missing" /*)*/;
+  public static final String Gst_Address_Message_2 = /*$$(*/
+      "State is Missing in Address" /*)*/;
 }

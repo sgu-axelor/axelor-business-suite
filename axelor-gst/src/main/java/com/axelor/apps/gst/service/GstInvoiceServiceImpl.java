@@ -59,14 +59,16 @@ public class GstInvoiceServiceImpl extends InvoiceServiceProjectImpl {
 
       // Calculating Cgst
       invoice.setNetCgst(invoice.getNetCgst().add(invoiceLine.getCgst()));
-
+      System.err.println(invoiceLine.getIgst()+", "+invoiceLine.getCgst() ); 
       if (invoiceLine.getTaxLine() == null) {
-        if (invoiceLine.getGstRate() != BigDecimal.ZERO) {
+        if (invoiceLine.getGstRate().compareTo(BigDecimal.ZERO) != 0
+            && (invoiceLine.getIgst().compareTo(BigDecimal.ZERO) != 0
+                || invoiceLine.getCgst().compareTo(BigDecimal.ZERO) != 0)) {
           temp = invoiceLine.getGstRate().multiply(invoiceLine.getExTaxTotal());
           // In the invoice currency
           invoice.setTaxTotal(invoice.getTaxTotal().add(temp));
           invoice.setInTaxTotal(invoice.getInTaxTotal().add(temp));
-          
+
           // In the company accounting currency
           invoice.setCompanyTaxTotal(invoice.getCompanyTaxTotal().add(temp));
           invoice.setCompanyInTaxTotal(invoice.getCompanyInTaxTotal().add(temp));

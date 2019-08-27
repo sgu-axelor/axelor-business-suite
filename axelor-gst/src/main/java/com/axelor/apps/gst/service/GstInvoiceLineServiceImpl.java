@@ -15,15 +15,19 @@ import com.axelor.apps.base.db.Address;
 import com.axelor.apps.base.service.CurrencyService;
 import com.axelor.apps.base.service.PriceListService;
 import com.axelor.apps.businessproject.service.InvoiceLineProjectServiceImpl;
+import com.axelor.apps.gst.exceptions.IExceptionMessage;
 import com.axelor.apps.purchase.service.PurchaseProductService;
 import com.axelor.exception.AxelorException;
+import com.axelor.exception.db.repo.TraceBackRepository;
+import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.google.inject.Inject;
 
-public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl implements GstInvoiceLineService{
+public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl
+    implements GstInvoiceLineService {
 
   InvoiceLineService invoiceLineService;
-  
+
   @Inject
   public GstInvoiceLineServiceImpl(
       CurrencyService currencyService,
@@ -31,7 +35,8 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
       AppAccountService appAccountService,
       AnalyticMoveLineService analyticMoveLineService,
       AccountManagementAccountService accountManagementAccountService,
-      PurchaseProductService purchaseProductService, InvoiceLineService invoiceLineService) {
+      PurchaseProductService purchaseProductService,
+      InvoiceLineService invoiceLineService) {
     super(
         currencyService,
         priceListService,
@@ -39,7 +44,7 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
         analyticMoveLineService,
         accountManagementAccountService,
         purchaseProductService);
-    this.invoiceLineService =invoiceLineService;
+    this.invoiceLineService = invoiceLineService;
   }
 
   @Override
@@ -55,7 +60,7 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
   }
 
   public Map<String, Object> calculateGst(
-      Invoice invoice, InvoiceLine invoiceLine, Map<String, Object> invoiceLineInformation) {
+      Invoice invoice, InvoiceLine invoiceLine, Map<String, Object> invoiceLineInformation) throws AxelorException {
 
     Address invoiceAddress = invoice.getAddress();
     Address companyAddress = invoice.getCompany().getAddress();
@@ -63,22 +68,27 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
     BigDecimal tax = invoiceLine.getTaxRate();
     final BigDecimal Two = new BigDecimal("2");
 
-    invoiceLineInformation.put("igst", BigDecimal.ZERO);
-    invoiceLineInformation.put("cgst", BigDecimal.ZERO);
-    invoiceLineInformation.put("sgst", BigDecimal.ZERO);
-    if (tax != null) {
-      if (invoiceAddress == null || companyAddress == null) {
-        return invoiceLineInformation;
-      } else {
+      invoiceLineInformation.put("igst", BigDecimal.ZERO);
+      invoiceLineInformation.put("cgst", BigDecimal.ZERO);
+      invoiceLineInformation.put("sgst", BigDecimal.ZERO);
+      if (tax != null) {
+        if (invoiceAddress == null || companyAddress == null) {
+          throw new AxelorException(
+              TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
+              I18n.get(IExceptionMessage.Gst_Address_Message_1));
+              }
+        if (invoiceAddress.getState() == null || companyAddress.getState() == null) {
+          throw new AxelorException(
+              TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
+              I18n.get(IExceptionMessage.Gst_Address_Message_2));
+        }
         if (invoiceAddress.getState() == companyAddress.getState()) {
           invoiceLineInformation.put("cgst", price.multiply(tax).divide(Two));
           invoiceLineInformation.put("sgst", price.multiply(tax).divide(Two));
         } else {
           invoiceLineInformation.put("igst", price.multiply(tax));
-          System.err.println( ); 
         }
       }
-    }
     return invoiceLineInformation;
   }
 
@@ -94,10 +104,11 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
   }
 
   @Override
-  public Map<String, Object> compute(Invoice invoice, InvoiceLine invoiceLine) throws AxelorException {
-    
-    Map<String, Object>invoiceLineInformation = new HashMap<String, Object>();
-    
+  public Map<String, Object> compute(Invoice invoice, InvoiceLine invoiceLine)
+      throws AxelorException {
+
+    Map<String, Object> invoiceLineInformation = new HashMap<String, Object>();
+
     BigDecimal exTaxTotal;
     BigDecimal companyExTaxTotal;
     BigDecimal inTaxTotal;
@@ -113,10 +124,9 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
       invoiceLineInformation.put("taxRate", taxRate);
       invoiceLineInformation.put("taxCode", invoiceLine.getTaxLine().getTax().getCode());
     }
-    
-    if (taxRate == BigDecimal.ZERO)
-      taxRate = invoiceLine.getGstRate();
-    
+
+    if (taxRate.compareTo(BigDecimal.ZERO) == 0) taxRate = invoiceLine.getGstRate();
+
     if (!invoice.getInAti()) {
       exTaxTotal = InvoiceLineManagement.computeAmount(invoiceLine.getQty(), priceDiscounted);
       inTaxTotal = exTaxTotal.add(exTaxTotal.multiply(taxRate));
@@ -133,7 +143,7 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
     invoiceLineInformation.put("companyInTaxTotal", companyInTaxTotal);
     invoiceLineInformation.put("companyExTaxTotal", companyExTaxTotal);
     invoiceLineInformation = this.calculateGst(invoice, invoiceLine, invoiceLineInformation);
-    
+
     return invoiceLineInformation;
   }
 }
