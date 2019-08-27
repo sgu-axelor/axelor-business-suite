@@ -113,7 +113,10 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
       invoiceLineInformation.put("taxRate", taxRate);
       invoiceLineInformation.put("taxCode", invoiceLine.getTaxLine().getTax().getCode());
     }
-
+    
+    if (taxRate == BigDecimal.ZERO)
+      taxRate = invoiceLine.getGstRate();
+    
     if (!invoice.getInAti()) {
       exTaxTotal = InvoiceLineManagement.computeAmount(invoiceLine.getQty(), priceDiscounted);
       inTaxTotal = exTaxTotal.add(exTaxTotal.multiply(taxRate));
@@ -133,13 +136,4 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl imp
     
     return invoiceLineInformation;
   }
-
-  /*  @Override
-  public Map<String, Object> fillPriceAndAccount(
-      Invoice invoice, InvoiceLine invoiceLine, boolean isPurchase) throws AxelorException {
-    Map<String, Object> productInformation = super.fillPriceAndAccount(invoice, invoiceLine, isPurchase);
-
-
-    return productInformation;
-  }*/
 }
