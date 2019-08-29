@@ -3,9 +3,32 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.1.xsd">
 
+    <kanban name="invoice-kanban" sequenceBy="priority"
+        model="com.axelor.apps.account.db.Invoice" columnBy="statusSelect" title="Invocies"
+        draggable="true">
+        <field name="reference" />
+        <field name="company"/>
+        <field name="partner" />
+        <field name="invoiceDate" />
+        <hilite color="danger" if="priority == 10" />
+        <hilite color="success" if="priority == 0" />
+        <hilite color="warning" if="priority >= 5" />
+        <hilite color="info" if="priority > 0" />
+        <template>
+            <![CDATA[
+                <h4>{{reference}}</h4>
+                <div class="card-body">{{company.name}}</div>
+                <div class="card-body">{{partner.name}}</div>
+                <div class="card-footer">
+                  <i class='fa fa-clock-o' ng-show="invoiceDate"></i> <span>{{invoiceDate|date:'yyyy-MM-dd'}}</span>
+                </div>
+            ]]>
+        </template>
+    </kanban>
 
     <form name="invoice-form" title="Invoice" model="com.axelor.apps.account.db.Invoice"
-        onNew="action-account-invoice-onnew-group" onLoad="action-account-invoice-onload-group" id="invoice-form-with-gsts">
+        onNew="action-account-invoice-onnew-group" onLoad="action-account-invoice-onload-group"
+        id="invoice-form-with-gsts">
 
         <toolbar>
             <button name="reportsBtn" title="Reports" icon="fa-print"
@@ -433,6 +456,11 @@ InvoiceSet.length > 0))"
                 canView="false" />
             <field name="ventilatedDate" hidden="true" showIf="ventilatedDate" colSpan="6" />
         </panel>
+        <!-- Priority -->
+        <panel sidebar="true">
+            <field name="priority" max="10" min="0" />
+        </panel>
+        <!-- Priority -->
         <panel sidebar="true" name="totalsPanel" title="Totals" showTitle="false" itemSpan="6"
             hideIf="partner == null">
             <field name="currency.code" hidden="true" />
@@ -691,7 +719,11 @@ InvoiceSet.length > 0))"
                 canView="false" />
             <field name="ventilatedDate" hidden="true" showIf="ventilatedDate" colSpan="6" />
         </panel>
-
+        <!-- Priority -->
+        <panel sidebar="true">
+            <field name="priority" max="10" min="0" />
+        </panel>
+        <!-- Priority -->
         <panel sidebar="true" name="totalsPanel" title="Totals" itemSpan="6">
             <field name="currency.symbol" hidden="true" />
             <field name="inTaxTotal" css="order-subtotal" showTitle="false" colSpan="12">

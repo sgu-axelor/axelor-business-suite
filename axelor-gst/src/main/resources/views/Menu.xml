@@ -98,7 +98,7 @@
   </action-view>
 
   <menuitem title="Sequence" name="menu-gst-root-company-sequence"
-    parent="menu-gst-root-company" />
+    parent="menu-gst-root-company" action="admin.root.general.sequence.generic"/>
 
 
   <menuitem title="New Invoice" name="menu-gst-root-invoice-new-invoice"

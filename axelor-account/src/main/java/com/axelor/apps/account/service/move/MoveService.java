@@ -305,8 +305,11 @@ public class MoveService {
                 MoveRepository.TECHNICAL_ORIGIN_AUTOMATIC);
 
         if (move != null) {
+          BigDecimal amount = BigDecimal.ZERO;
+          
           BigDecimal totalCreditAmount = moveToolService.getTotalCreditAmount(creditMoveLineList);
-          BigDecimal amount = totalCreditAmount.min(invoiceCustomerMoveLine.getDebit());
+          if(invoiceCustomerMoveLine != null)
+            amount = totalCreditAmount.min(invoiceCustomerMoveLine.getDebit());
 
           // Création de la ligne au crédit
           MoveLine creditMoveLine =
