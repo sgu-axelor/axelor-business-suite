@@ -10,6 +10,9 @@
                 icon="fa-book" />
             <button name="checkDuplicateBtn" title="Check Duplicate"
                 onClick="action-general-check-duplicate-records" />
+            <button name="showReportBtn" title="Products' Report"
+                onClick="action-gst-product-method-show-products" showIf="_ids" />
+
         </toolbar>
         <field name="code" x-bind="{{code|unaccent|uppercase}}" width="120" />
         <field name="name" width="300" />
@@ -543,4 +546,7 @@
         model="com.axelor.apps.base.db.Product" if-module="axelor-gst">
         <field name="gstRate" expr="eval: productCategory?.gstRate" />
     </action-record>
+    <action-method name="action-gst-product-method-show-products">
+        <call class="com.axelor.apps.gst.web.ProductController" method="showProducts"/>
+    </action-method>
 </object-views>
