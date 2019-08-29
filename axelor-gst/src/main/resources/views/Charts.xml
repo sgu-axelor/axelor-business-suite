@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<chart name="chart.customers.per.state" title="Cutomers in States">
+		<dataset type="sql">
+    <![CDATA[
+			select 
+                count(Partner.id) as count,
+                Address.state as state
+            from 
+                base_partner Partner 
+            inner join 
+                base_partner_address PartnerAddress 
+            on 
+                Partner.id = PartnerAddress.partner 
+            inner join 
+                base_address Address 
+            on 
+                PartnerAddress.address = Address.id
+            where 
+                Partner.is_customer = 't' 
+            group by Address.state
+    ]]>
+    </dataset>
+		<category key="state" />
+		<series key="count" type="pie" />
+	</chart>
+	
+	<chart name="chart.unpaid.invoices.per.cutomer" title="Unpaid Invoices per Customer"
+		onInit="action-cahrts-attrs-set-defaults">
+		<search-fields>
+			<field type="date" name="fromDate" title="From Date" />
+			<field type="date" name="toDate" title="To Date" />
+		</search-fields>
+		<dataset type="jpql">
+    <![CDATA[
+	    SELECT
+	        count(self) as invoices,
+	        _party.fullName as customer
+	    FROM
+	    	Invoice self
+	    LEFT JOIN
+	    	self.partner as _party
+	    WHERE
+	    	_party.isCustomer = 't' AND
+	    	self.statusSelect != '4' AND
+	    	self.invoiceDate > :fromDate AND
+	    	self.invoiceDate < :toDate
+	    GROUP BY
+	    	_party.fullName
+    ]]>
+    </dataset>
+		<category key="customer" />
+		<series key="invoices" type="bar" />
+	</chart>
+
+	<chart name="chart.paid.invoices.per.category.per.product"
+		title="Paid Invoices per Category per product" onInit="action-cahrts-attrs-set-defaults">
+		<search-fields>
+			<field type="date" name="fromDate" title="From Date" />
+			<field type="date" name="toDate" title="To Date" />
+		</search-fields>
+		<dataset type="sql">
+    <![CDATA[
+            select 
+            	count(inv.id) as invoices, 
+            	pdc.name as category, 
+            	pd.name as product
+            from 
+            	account_invoice inv 
+            left join 
+            	account_invoice_line inl 
+            on
+            	inl.invoice = inv.id 
+            left join 
+            	base_product pd 
+            on 
+            	inl.product=pd.id
+            left join
+            	base_product_category pdc
+            on  
+            	pd.product_category = pdc.id
+            where 
+            	inv.status_select = '4' and
+            	DATE(inv.invoice_date) > DATE(:fromDate) AND
+            	DATE(inv.invoice_date) < DATE(:toDate)
+            group by 
+            	pdc.name, pd.name
+    ]]>
+    </dataset>
+		<category key="product" />
+		<series key="invoices" type="bar" />
+	</chart>
+
+	<action-attrs name="action-cahrts-attrs-set-defaults">
+		<attribute name="value" for="toDate" expr="eval: __date__" />
+		<attribute name="value" for="fromDate" expr="eval: __date__.withDayOfMonth(1)" />
+	</action-attrs>
+
+
+	<chart name="chart.amount.per.status" title="Amount per Status">
+		<dataset type="jpql">
+    <![CDATA[
+	    SELECT
+	        sum(self.inTaxTotal) AS amount,
+	        self.statusSelect as status
+	    FROM
+	        Invoice self
+	    GROUP BY
+	        self.statusSelect
+    ]]>
+    </dataset>
+		<category key="status"/>
+		<series key="amount" type="bar" />
+	</chart>
+	<chart name="chart.invoiceline.per.status" title="InvoiceLine per Status">
+		<dataset type="jpql">
+    <![CDATA[
+	    select 
+	    	sum(self.inTaxTotal) AS amount,	
+	  	  	count(self) as invoices, 
+	  	  	self.statusSelect as status
+		from 
+			Invoice self 
+		group by 
+			self.statusSelect
+    ]]>
+    </dataset>
+		<category key="invoices" type="number" />
+		<series key="amount" groupBy="status" type="line" />
+	</chart>
+
+</object-views>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object-views xmlns="http://axelor.com/xml/ns/object-views"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+
+	<dashboard name="gst-reporting-dashboard" title="Stats!">
+		<dashlet action="chart:chart.unpaid.invoices.per.cutomer" colSpan="6" />
+		<dashlet action="chart:chart.paid.invoices.per.category.per.product" colSpan="6" />
+		<dashlet action="chart:chart.customers.per.state" colSpan="6" />
+		<dashlet action="chart:chart.amount.per.status" colSpan="6" />
+		<dashlet action="chart:chart.invoiceline.per.status" colSpan="6" />
+		<dashlet action="show.older.invoice" colSpan="12"/>
+	</dashboard>
+
+	<action-view name="show.older.invoice" title="Older Invoices"
+		model="com.axelor.apps.account.db.Invoice">
+		<view type="grid" name="invoice-grid" />
+		<domain>self.invoiceDate &lt; :_invoiceDate  and self.statusSelect = :_validated</domain>
+		<context name="_validated" expr="eval: 2" />
+		<context name="_invoiceDate"
+			expr="eval:__date__.getMonthValue() == 1 ? __date__.withMonth(12).withYear(__date__.getYear()-1) : __date__.withMonth(__date__.getMonthValue()-1)" />
+	</action-view>
+
+</object-views>
