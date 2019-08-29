@@ -1,7 +1,5 @@
 package com.axelor.apps.gst.service;
 
-import java.math.BigDecimal;
-
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
 import com.axelor.apps.account.db.repo.InvoiceRepository;
@@ -16,6 +14,7 @@ import com.axelor.apps.base.service.alarm.AlarmEngineService;
 import com.axelor.apps.businessproject.service.InvoiceServiceProjectImpl;
 import com.axelor.exception.AxelorException;
 import com.google.inject.Inject;
+import java.math.BigDecimal;
 
 public class GstInvoiceServiceImpl extends InvoiceServiceProjectImpl {
 
@@ -52,26 +51,26 @@ public class GstInvoiceServiceImpl extends InvoiceServiceProjectImpl {
     BigDecimal temp = BigDecimal.ZERO;
     for (InvoiceLine invoiceLine : invoice.getInvoiceLineList()) {
       // Calculating Igst
-      invoice.setNetIgst(invoice.getNetIgst().add(invoiceLine.getIgst()));
+      invoice.setNetIgst(invoice.getNetIgst().add(invoiceLine.getIgst()).setScale(2,BigDecimal.ROUND_HALF_UP));
 
       // Calculating Sgst
-      invoice.setNetSgst(invoice.getNetSgst().add(invoiceLine.getSgst()));
+      invoice.setNetSgst(invoice.getNetSgst().add(invoiceLine.getSgst()).setScale(2,BigDecimal.ROUND_HALF_UP));
 
       // Calculating Cgst
-      invoice.setNetCgst(invoice.getNetCgst().add(invoiceLine.getCgst()));
-      System.err.println(invoiceLine.getIgst()+", "+invoiceLine.getCgst() ); 
+      invoice.setNetCgst(invoice.getNetCgst().add(invoiceLine.getCgst()).setScale(2,BigDecimal.ROUND_HALF_UP));
+      System.err.println(invoiceLine.getIgst() + ", " + invoiceLine.getCgst());
       if (invoiceLine.getTaxLine() == null) {
         if (invoiceLine.getGstRate().compareTo(BigDecimal.ZERO) != 0
             && (invoiceLine.getIgst().compareTo(BigDecimal.ZERO) != 0
                 || invoiceLine.getCgst().compareTo(BigDecimal.ZERO) != 0)) {
           temp = invoiceLine.getGstRate().multiply(invoiceLine.getExTaxTotal());
           // In the invoice currency
-          invoice.setTaxTotal(invoice.getTaxTotal().add(temp));
-          invoice.setInTaxTotal(invoice.getInTaxTotal().add(temp));
+          invoice.setTaxTotal(invoice.getTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
+          invoice.setInTaxTotal(invoice.getInTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
 
           // In the company accounting currency
-          invoice.setCompanyTaxTotal(invoice.getCompanyTaxTotal().add(temp));
-          invoice.setCompanyInTaxTotal(invoice.getCompanyInTaxTotal().add(temp));
+          invoice.setCompanyTaxTotal(invoice.getCompanyTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
+          invoice.setCompanyInTaxTotal(invoice.getCompanyInTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
         }
       }
     }

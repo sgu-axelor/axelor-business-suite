@@ -1,9 +1,5 @@
 package com.axelor.apps.gst.service;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
 import com.axelor.apps.account.service.AccountManagementAccountService;
@@ -22,6 +18,9 @@ import com.axelor.exception.db.repo.TraceBackRepository;
 import com.axelor.i18n.I18n;
 import com.axelor.inject.Beans;
 import com.google.inject.Inject;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl
     implements GstInvoiceLineService {
@@ -60,7 +59,8 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl
   }
 
   public Map<String, Object> calculateGst(
-      Invoice invoice, InvoiceLine invoiceLine, Map<String, Object> invoiceLineInformation) throws AxelorException {
+      Invoice invoice, InvoiceLine invoiceLine, Map<String, Object> invoiceLineInformation)
+      throws AxelorException {
 
     Address invoiceAddress = invoice.getAddress();
     Address companyAddress = invoice.getCompany().getAddress();
@@ -68,27 +68,27 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl
     BigDecimal tax = invoiceLine.getTaxRate();
     final BigDecimal Two = new BigDecimal("2");
 
-      invoiceLineInformation.put("igst", BigDecimal.ZERO);
-      invoiceLineInformation.put("cgst", BigDecimal.ZERO);
-      invoiceLineInformation.put("sgst", BigDecimal.ZERO);
-      if (tax != null) {
-        if (invoiceAddress == null || companyAddress == null) {
-          throw new AxelorException(
-              TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-              I18n.get(IExceptionMessage.Gst_Address_Message_1));
-              }
-        if (invoiceAddress.getState() == null || companyAddress.getState() == null) {
-          throw new AxelorException(
-              TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-              I18n.get(IExceptionMessage.Gst_Address_Message_2));
-        }
-        if (invoiceAddress.getState() == companyAddress.getState()) {
-          invoiceLineInformation.put("cgst", price.multiply(tax).divide(Two));
-          invoiceLineInformation.put("sgst", price.multiply(tax).divide(Two));
-        } else {
-          invoiceLineInformation.put("igst", price.multiply(tax));
-        }
+    invoiceLineInformation.put("igst", BigDecimal.ZERO);
+    invoiceLineInformation.put("cgst", BigDecimal.ZERO);
+    invoiceLineInformation.put("sgst", BigDecimal.ZERO);
+    if (tax != null) {
+      if (invoiceAddress == null || companyAddress == null) {
+        throw new AxelorException(
+            TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
+            I18n.get(IExceptionMessage.Gst_Address_Message_1));
       }
+      if (invoiceAddress.getState() == null || companyAddress.getState() == null) {
+        throw new AxelorException(
+            TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
+            I18n.get(IExceptionMessage.Gst_Address_Message_2));
+      }
+      if (invoiceAddress.getState() == companyAddress.getState()) {
+        invoiceLineInformation.put("cgst", price.multiply(tax).divide(Two, 2, BigDecimal.ROUND_HALF_UP));
+        invoiceLineInformation.put("sgst", price.multiply(tax).divide(Two, 2, BigDecimal.ROUND_HALF_UP));
+      } else {
+        invoiceLineInformation.put("igst", price.multiply(tax).setScale(2, BigDecimal.ROUND_HALF_UP));
+      }
+    }
     return invoiceLineInformation;
   }
 
@@ -128,8 +128,8 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl
     if (taxRate.compareTo(BigDecimal.ZERO) == 0) taxRate = invoiceLine.getGstRate();
 
     if (!invoice.getInAti()) {
-      exTaxTotal = InvoiceLineManagement.computeAmount(invoiceLine.getQty(), priceDiscounted);
-      inTaxTotal = exTaxTotal.add(exTaxTotal.multiply(taxRate));
+      exTaxTotal = InvoiceLineManagement.computeAmount(invoiceLine.getQty(), priceDiscounted).setScale(2,BigDecimal.ROUND_HALF_UP);
+      inTaxTotal = exTaxTotal.add(exTaxTotal.multiply(taxRate)).setScale(2,BigDecimal.ROUND_HALF_UP);
     } else {
       inTaxTotal = InvoiceLineManagement.computeAmount(invoiceLine.getQty(), priceDiscounted);
       exTaxTotal = inTaxTotal.divide(taxRate.add(BigDecimal.ONE), 2, BigDecimal.ROUND_HALF_UP);

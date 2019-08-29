@@ -1,7 +1,5 @@
 package com.axelor.apps.gst.service;
 
-import java.util.List;
-
 import com.axelor.apps.account.db.AccountManagement;
 import com.axelor.apps.account.db.FiscalPosition;
 import com.axelor.apps.account.db.Tax;
@@ -14,6 +12,7 @@ import com.axelor.exception.AxelorException;
 import com.axelor.exception.db.repo.TraceBackRepository;
 import com.axelor.i18n.I18n;
 import com.google.inject.Inject;
+import java.util.List;
 
 public class GstAccountManagementServiceImpl extends AccountManagementServiceAccountImpl {
 
@@ -36,7 +35,7 @@ public class GstAccountManagementServiceImpl extends AccountManagementServiceAcc
 
     for (AccountManagement accountManagement : accountManagements) {
       if (accountManagement.getCompany().equals(company)) {
-        if (accountManagement.getSaleTax().getCode().equals(GSTCODE)) {
+        if (accountManagement.getSaleTax()!=null && accountManagement.getSaleTax().getCode().equals(GSTCODE)) {
           return accountManagement;
         }
       }
@@ -44,7 +43,7 @@ public class GstAccountManagementServiceImpl extends AccountManagementServiceAcc
 
     return null;
   }
-  
+
   @Override
   public Tax getProductTax(
       Product product, Company company, FiscalPosition fiscalPosition, boolean isPurchase)

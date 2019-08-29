@@ -15,17 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.axelor.apps.gst.exceptions;
+package com.axelor.apps.gst.report;
 
-/**
- * Interface of Exceptions.
- *
- * @author dubaux
- */
-public interface IExceptionMessage {
+public interface ITranslation {
 
-  public static final String ACCOUNT_MANAGEMENT_3 = /*$$(*/
-      "GST Tax configuration is missing for Product: %s (company: %s). So we are using Product GstRate" /*)*/;
-  public static final String Gst_Address_Message_1 = /*$$(*/ "Address is Missing" /*)*/;
-  public static final String Gst_Address_Message_2 = /*$$(*/ "State is Missing in Address" /*)*/;
+  public static final String INVOICE_NET_IGST = /*$$(*/ "Invoice.netIgst"; /*)*/
+  public static final String INVOICE_NET_SGST = /*$$(*/ "Invoice.netSgst"; /*)*/
+  public static final String INVOICE_NET_CGST = /*$$(*/ "Invoice.netCgst"; /*)*/
 }

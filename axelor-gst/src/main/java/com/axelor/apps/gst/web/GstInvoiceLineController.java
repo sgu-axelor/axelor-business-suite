@@ -1,8 +1,5 @@
 package com.axelor.apps.gst.web;
 
-import java.math.BigDecimal;
-import java.util.Map;
-
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
 import com.axelor.apps.account.service.invoice.InvoiceLineService;
@@ -13,6 +10,8 @@ import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
 import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
+import java.math.BigDecimal;
+import java.util.Map;
 
 public class GstInvoiceLineController extends InvoiceLineController {
 
@@ -29,14 +28,14 @@ public class GstInvoiceLineController extends InvoiceLineController {
     Invoice invoice = this.getInvoice(context);
     BigDecimal priceDiscounted =
         Beans.get(InvoiceLineService.class).computeDiscount(invoiceLine, invoice.getInAti());
-    
+
     if (invoice == null
         || invoiceLine.getPrice() == null
         || invoiceLine.getInTaxPrice() == null
         || invoiceLine.getQty() == null) {
       return;
     }
-    
+
     response.setAttr(
         "priceDiscounted",
         "hidden",
