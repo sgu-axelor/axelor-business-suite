@@ -8,7 +8,7 @@
     <panel name="mainPanel" title="Address details" colSpan="12">
       <field name="addressL7Country" onChange="action-address-record-clear-fields" required="true" canEdit="false" form-view="country-form"
         grid-view="country-grid" colSpan="6" />
-      <field name="state" onChange="action-address-record-clear-fields" canEdit="false" form-view="gst-state-form" grid-view="gst-state-grid"
+      <field name="state" canEdit="false" form-view="gst-state-form" grid-view="gst-state-grid"
         colSpan="6" if="__config__.app.isApp('gst')" />
       <field name="addressL2" x-bind="{{addressL2|uppercase}}" placeholder="e.g. Financial department, CEO" />
       <field name="addressL3" x-bind="{{addressL3|uppercase}}" placeholder="e.g. Building A, Entry 2, 2nd Floor, Door 2E" />
@@ -59,7 +59,7 @@
     <panel name="mainPanel" title="Address details" colSpan="12">
       <field name="addressL7Country" onChange="action-address-record-clear-fields" required="true" canEdit="false" form-view="country-form"
         grid-view="country-grid" colSpan="12" />
-      <field name="state" onChange="action-address-record-clear-fields" canEdit="false" form-view="gst-state-form" grid-view="gst-state-grid"
+      <field name="state" canEdit="false" form-view="gst-state-form" grid-view="gst-state-grid"
         colSpan="6" if="__config__.app.isApp('gst')" />
       <field name="addressL2" x-bind="{{addressL2|uppercase}}" placeholder="e.g. Financial department, CEO" />
       <field name="addressL3" x-bind="{{addressL3|uppercase}}" placeholder="e.g. Building A, Entry 2, 2nd Floor, Door 2E" />

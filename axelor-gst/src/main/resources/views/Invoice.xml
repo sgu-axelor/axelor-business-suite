@@ -6,7 +6,7 @@
     <kanban name="invoice-kanban" sequenceBy="priority"
         model="com.axelor.apps.account.db.Invoice" columnBy="statusSelect" title="Invocies"
         draggable="true">
-        <field name="reference" />
+        <field name="invoiceId" />
         <field name="company"/>
         <field name="partner" />
         <field name="invoiceDate" />
@@ -16,9 +16,8 @@
         <hilite color="info" if="priority > 0" />
         <template>
             <![CDATA[
-                <h4>{{reference}}</h4>
-                <div class="card-body">{{company.name}}</div>
-                <div class="card-body">{{partner.name}}</div>
+                <h4>{{invocieId}}</h4>
+                <div class="card-body">{{company.name}}<br>{{partner.fullName}}</div>
                 <div class="card-footer">
                   <i class='fa fa-clock-o' ng-show="invoiceDate"></i> <span>{{invoiceDate|date:'yyyy-MM-dd'}}</span>
                 </div>
@@ -457,7 +456,7 @@ InvoiceSet.length > 0))"
             <field name="ventilatedDate" hidden="true" showIf="ventilatedDate" colSpan="6" />
         </panel>
         <!-- Priority -->
-        <panel sidebar="true">
+        <panel sidebar="true" if="__config__.app.isApp('gst')" hideIf="partner==null">
             <field name="priority" max="10" min="0" />
         </panel>
         <!-- Priority -->
@@ -471,12 +470,12 @@ InvoiceSet.length > 0))"
                    <dt x-translate>Total W.T.</dt>
                    <dd>{{record.exTaxTotal}} {{record.currency.symbol}}</dd>
 <!--       GSTs              -->
-                   <dt x-translate>Total IGST</dt>
-                   <dd>{{record.netIgst}} {{record.currency.symbol}}</dd>
-                   <dt x-translate>Total CGST</dt>
-                   <dd>{{record.netCgst}} {{record.currency.symbol}}</dd>
-                   <dt x-translate>Total SGST</dt>
-                   <dd>{{record.netSgst}} {{record.currency.symbol}}</dd>
+                   <dt x-translate ng-if="record.netIgst > 0">Total IGST</dt>
+                   <dd ng-if="record.netIgst > 0">{{record.netIgst}} {{record.currency.symbol}}</dd>
+                   <dt x-translate ng-if="record.netCgst >0">Total CGST</dt>
+                   <dd ng-if="record.netSgst > 0">{{record.netCgst}} {{record.currency.symbol}}</dd>
+                   <dt x-translate ng-if="record.netSgst > 0">Total SGST</dt>
+                   <dd ng-if="record.netSgst > 0">{{record.netSgst}} {{record.currency.symbol}}</dd>
 <!--       GSTs              -->
                    <dt x-translate>Total tax</dt>
                    <dd>{{record.taxTotal}} {{record.currency.symbol}}</dd>
@@ -720,7 +719,7 @@ InvoiceSet.length > 0))"
             <field name="ventilatedDate" hidden="true" showIf="ventilatedDate" colSpan="6" />
         </panel>
         <!-- Priority -->
-        <panel sidebar="true">
+        <panel sidebar="true" if="__config__.app.isApp('gst')" hideIf="partner==null">
             <field name="priority" max="10" min="0" />
         </panel>
         <!-- Priority -->
@@ -732,12 +731,12 @@ InvoiceSet.length > 0))"
                    <dt x-translate>Total W.T.</dt>
                    <dd>{{record.exTaxTotal}} {{record.currency.symbol}}</dd>
 <!--       GSTs              -->
-                   <dt x-translate>Total IGST</dt>
-                   <dd>{{record.netIgst}} {{record.currency.symbol}}</dd>
-                   <dt x-translate>Total CGST</dt>
-                   <dd>{{record.netCgst}} {{record.currency.symbol}}</dd>
-                   <dt x-translate>Total SGST</dt>
-                   <dd>{{record.netSgst}} {{record.currency.symbol}}</dd>
+                   <dt x-translate ng-if="record.netIgst > 0">Total IGST</dt>
+                   <dd ng-if="record.netIgst > 0">{{record.netIgst}} {{record.currency.symbol}}</dd>
+                   <dt x-translate ng-if="record.netCgst >0">Total CGST</dt>
+                   <dd ng-if="record.netSgst > 0">{{record.netCgst}} {{record.currency.symbol}}</dd>
+                   <dt x-translate ng-if="record.netSgst > 0">Total SGST</dt>
+                   <dd ng-if="record.netSgst > 0">{{record.netSgst}} {{record.currency.symbol}}</dd>
 <!--       GSTs              -->
                    <dt x-translate>Total tax</dt>
                    <dd>{{record.taxTotal}} {{record.currency.symbol}}</dd>

@@ -11,8 +11,10 @@ import com.axelor.apps.account.service.invoice.factory.ValidateFactory;
 import com.axelor.apps.account.service.invoice.factory.VentilateFactory;
 import com.axelor.apps.base.service.PartnerService;
 import com.axelor.apps.base.service.alarm.AlarmEngineService;
+import com.axelor.apps.base.service.app.AppService;
 import com.axelor.apps.businessproject.service.InvoiceServiceProjectImpl;
 import com.axelor.exception.AxelorException;
+import com.axelor.inject.Beans;
 import com.google.inject.Inject;
 import java.math.BigDecimal;
 
@@ -45,32 +47,41 @@ public class GstInvoiceServiceImpl extends InvoiceServiceProjectImpl {
   public Invoice compute(Invoice invoice) throws AxelorException {
 
     invoice = super.compute(invoice);
-    invoice.setNetCgst(BigDecimal.ZERO);
-    invoice.setNetSgst(BigDecimal.ZERO);
-    invoice.setNetIgst(BigDecimal.ZERO);
-    BigDecimal temp = BigDecimal.ZERO;
-    for (InvoiceLine invoiceLine : invoice.getInvoiceLineList()) {
-      // Calculating Igst
-      invoice.setNetIgst(invoice.getNetIgst().add(invoiceLine.getIgst()).setScale(2,BigDecimal.ROUND_HALF_UP));
+    if (Beans.get(AppService.class).isApp("gst")) {
+      invoice.setNetCgst(BigDecimal.ZERO);
+      invoice.setNetSgst(BigDecimal.ZERO);
+      invoice.setNetIgst(BigDecimal.ZERO);
+      BigDecimal temp = BigDecimal.ZERO;
+      for (InvoiceLine invoiceLine : invoice.getInvoiceLineList()) {
+        // Calculating Igst
+        invoice.setNetIgst(
+            invoice.getNetIgst().add(invoiceLine.getIgst()).setScale(2, BigDecimal.ROUND_HALF_UP));
 
-      // Calculating Sgst
-      invoice.setNetSgst(invoice.getNetSgst().add(invoiceLine.getSgst()).setScale(2,BigDecimal.ROUND_HALF_UP));
+        // Calculating Sgst
+        invoice.setNetSgst(
+            invoice.getNetSgst().add(invoiceLine.getSgst()).setScale(2, BigDecimal.ROUND_HALF_UP));
 
-      // Calculating Cgst
-      invoice.setNetCgst(invoice.getNetCgst().add(invoiceLine.getCgst()).setScale(2,BigDecimal.ROUND_HALF_UP));
-      System.err.println(invoiceLine.getIgst() + ", " + invoiceLine.getCgst());
-      if (invoiceLine.getTaxLine() == null) {
-        if (invoiceLine.getGstRate().compareTo(BigDecimal.ZERO) != 0
-            && (invoiceLine.getIgst().compareTo(BigDecimal.ZERO) != 0
-                || invoiceLine.getCgst().compareTo(BigDecimal.ZERO) != 0)) {
-          temp = invoiceLine.getGstRate().multiply(invoiceLine.getExTaxTotal());
-          // In the invoice currency
-          invoice.setTaxTotal(invoice.getTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
-          invoice.setInTaxTotal(invoice.getInTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
+        // Calculating Cgst
+        invoice.setNetCgst(
+            invoice.getNetCgst().add(invoiceLine.getCgst()).setScale(2, BigDecimal.ROUND_HALF_UP));
+        System.err.println(invoiceLine.getIgst() + ", " + invoiceLine.getCgst());
+        if (invoiceLine.getTaxLine() == null) {
+          if (invoiceLine.getGstRate().compareTo(BigDecimal.ZERO) != 0
+              && (invoiceLine.getIgst().compareTo(BigDecimal.ZERO) != 0
+                  || invoiceLine.getCgst().compareTo(BigDecimal.ZERO) != 0)) {
+            temp = invoiceLine.getGstRate().multiply(invoiceLine.getExTaxTotal());
+            // In the invoice currency
+            invoice.setTaxTotal(
+                invoice.getTaxTotal().add(temp).setScale(2, BigDecimal.ROUND_HALF_UP));
+            invoice.setInTaxTotal(
+                invoice.getInTaxTotal().add(temp).setScale(2, BigDecimal.ROUND_HALF_UP));
 
-          // In the company accounting currency
-          invoice.setCompanyTaxTotal(invoice.getCompanyTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
-          invoice.setCompanyInTaxTotal(invoice.getCompanyInTaxTotal().add(temp).setScale(2,BigDecimal.ROUND_HALF_UP));
+            // In the company accounting currency
+            invoice.setCompanyTaxTotal(
+                invoice.getCompanyTaxTotal().add(temp).setScale(2, BigDecimal.ROUND_HALF_UP));
+            invoice.setCompanyInTaxTotal(
+                invoice.getCompanyInTaxTotal().add(temp).setScale(2, BigDecimal.ROUND_HALF_UP));
+          }
         }
       }
     }

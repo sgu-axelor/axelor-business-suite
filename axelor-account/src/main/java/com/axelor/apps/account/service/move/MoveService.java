@@ -306,9 +306,9 @@ public class MoveService {
 
         if (move != null) {
           BigDecimal amount = BigDecimal.ZERO;
-          
+
           BigDecimal totalCreditAmount = moveToolService.getTotalCreditAmount(creditMoveLineList);
-          if(invoiceCustomerMoveLine != null)
+          if (invoiceCustomerMoveLine != null)
             amount = totalCreditAmount.min(invoiceCustomerMoveLine.getDebit());
 
           // Création de la ligne au crédit

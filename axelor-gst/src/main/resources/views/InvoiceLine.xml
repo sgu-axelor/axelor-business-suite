@@ -77,7 +77,7 @@
                     onSelect="action-invoice-line-attrs-set-product-domain-onselect"
                     form-view="product-form" grid-view="product-grid" />
                 <!-- HSBN -->
-                <field name="hsbn" />
+                <field name="hsbn" if="__config__.app.isApp('gst')" if-module="axelor-gst"/>
                 <!-- HSBN -->
                 <field name="$isFilterOnSupplier" title="Filter on supplier" type="boolean"
                     widget="boolean-switch" colSpan="2"
@@ -244,7 +244,7 @@
                     onChange="action-group-account-invoice-line-product-onchange"
                     form-view="product-form" grid-view="product-grid" canView="false" />
                 <!-- HSBN -->
-                <field name="hsbn" />
+                <field name="hsbn" if="__config__.app.isApp('gst')" if-module="axelor-gst"/>
                 <!-- HSBN -->
                 <field name="productName" requiredIf="!typeSelect == 1" />
                 <field name="qty" required="true"
@@ -283,4 +283,22 @@
             </panel>
         </panel-tabs>
     </form>
+    <action-group name="action-group-account-invoice-line-product-onchange" id="action-group-gst-invoice-line-product-onchange">
+        <action name="action-invoice-line-method-get-product-information" />
+        <action name="action-invoice-line-method-get-product-price"
+            if="__config__.app.isApp('supplychain') &amp;&amp; (__config__.app.isApp('sale') &amp;&amp; __config__.app.getApp('sale').getProductPackMgt())" />
+        <action name="action-invoice-line-method-compute" if="!__config__.app.isApp('gst')"/>
+        <action name="action--gst-invoice-line-method-compute" if="__config__.app.isApp('gst')"/>
+        <action name="action-invoice-line-method-get-and-compute-analytic-distribution" />
+        <action name="action-budget-validate-exceed-line-amount" />
+        <action name="action-invoice-line-attrs-compute-total-pack"
+            if="(__config__.app.isApp('supplychain') &amp;&amp; __config__.app.getApp('sale').getProductPackMgt())" />
+        <action name="action-invoice-line-method-get-fixed-asset-category"
+            if="__config__.app.isApp('account')" />
+        <action name="action-attrs-account-invoice-line-onnew-onload" />
+    </action-group>
+    
+    <action-method name="action--gst-invoice-line-method-compute">
+        <call class="com.axelor.apps.gst.web.GstInvoiceLineController" method="compute"/>
+    </action-method>
 </object-views>

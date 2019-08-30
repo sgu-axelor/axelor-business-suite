@@ -24,8 +24,8 @@ package com.axelor.apps.gst.exceptions;
  */
 public interface IExceptionMessage {
 
-  public static final String ACCOUNT_MANAGEMENT_3 = /*$$(*/
+  public static final String GST_TAX_LINE_ERROR = /*$$(*/
       "GST Tax configuration is missing for Product: %s (company: %s). So we are using Product GstRate" /*)*/;
-  public static final String Gst_Address_Message_1 = /*$$(*/ "Address is Missing" /*)*/;
-  public static final String Gst_Address_Message_2 = /*$$(*/ "State is Missing in Address" /*)*/;
+  public static final String Gst_ADDRESS_MESSAGE_1 = /*$$(*/ "Address is Missing" /*)*/;
+  public static final String Gst_ADDRESS_MESSAGE_2 = /*$$(*/ "State is Missing in Address" /*)*/;
 }
