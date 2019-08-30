@@ -32,6 +32,7 @@ import com.axelor.apps.account.service.invoice.generator.line.InvoiceLineManagem
 import com.axelor.apps.base.db.Product;
 import com.axelor.db.mapper.Mapper;
 import com.axelor.exception.AxelorException;
+import com.axelor.exception.ResponseMessageType;
 import com.axelor.exception.service.TraceBackService;
 import com.axelor.inject.Beans;
 import com.axelor.rpc.ActionRequest;
@@ -163,7 +164,7 @@ public class InvoiceLineController {
           response.setFlash(errorMsg);
         }
       } catch (Exception e) {
-        TraceBackService.trace(response, e);
+        TraceBackService.trace(response, e, ResponseMessageType.INFORMATION);
       }
     } else {
       productInformation = invoiceLineService.resetProductInformation(invoice);

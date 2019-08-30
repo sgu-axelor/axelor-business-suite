@@ -3,8 +3,10 @@ package com.axelor.apps.gst.service;
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
 import com.axelor.exception.AxelorException;
-import java.util.Map;
+import java.util.ArrayList;
 
-public interface GstInvoiceLineService {
-  void compute(Invoice invoice, InvoiceLine invoiceLine) throws AxelorException;
+public interface InvoiceService {
+
+  ArrayList<InvoiceLine> setInvoiceLines(ArrayList<Integer> ids, Invoice invoice)
+      throws AxelorException;
 }

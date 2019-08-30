@@ -12,6 +12,8 @@
                 onClick="action-general-check-duplicate-records" />
             <button name="showReportBtn" title="Products' Report"
                 onClick="action-gst-product-method-show-products" showIf="_ids" />
+            <button name="addToInvoiceBtn" title="Add To Invoice"
+                onClick="action-gst-product-view-invoice" showIf="_ids" />
 
         </toolbar>
         <field name="code" x-bind="{{code|unaccent|uppercase}}" width="120" />
@@ -542,11 +544,34 @@
         </panel-mail>
     </form>
 
+    <form model="com.axelor.apps.base.db.Wizard" title="Invoice Details"
+        name="product-invoice-form">
+        <panel>
+            <field name="$company" type="many-to-one" widget="SuggestBox"
+                target="com.axelor.apps.base.db.Company" title="Company" required="true" />
+            <field name="$partner" type="many-to-one" widget="SuggestBox"
+                target="com.axelor.apps.base.db.Partner" title="Partner" required="true"
+                domain="self.isContact = false AND self.isCustomer = true AND :company member of self.companySet" />
+            <button name="okBtn" title="Ok" onClick="action-gst-product-view-invoice,close"
+                colSpan="2" />
+        </panel>
+    </form>
     <action-record name="action-gst-product-record-set-gstrate"
         model="com.axelor.apps.base.db.Product" if-module="axelor-gst">
         <field name="gstRate" expr="eval: productCategory?.gstRate" />
     </action-record>
+
     <action-method name="action-gst-product-method-show-products">
         <call class="com.axelor.apps.gst.web.ProductController" method="showProducts"/>
     </action-method>
+
+    <action-view name="action-gst-product-view-invoice" title="Invoice"
+        model="com.axelor.apps.account.db.Invoice">
+        <view type="form" name="invoice-form" />
+        <view-param name="search-filters" value="customer-invoices-filters" />
+        <domain>self.operationTypeSelect = 3</domain>
+        <context name="_ids" expr="eval: _ids" />
+        <context name="_operationTypeSelect" expr="eval:3" />
+        <context name="todayDate" expr="eval:__config__.app.getTodayDate()" />
+    </action-view>
 </object-views>

@@ -7,7 +7,7 @@
         model="com.axelor.apps.account.db.Invoice" columnBy="statusSelect" title="Invocies"
         draggable="true">
         <field name="invoiceId" />
-        <field name="company"/>
+        <field name="company" />
         <field name="partner" />
         <field name="invoiceDate" />
         <hilite color="danger" if="priority == 10" />
@@ -146,7 +146,7 @@
             hideIf="company == null">
             <field name="partner" colSpan="3" canEdit="false"
                 readonlyIf="((operationTypeSelect == 3 || operationTypeSelect == 4) &amp;&amp; statusSelect != 1) || ((operationTypeSelect == 1 || operationTypeSelect == 2) &amp;&amp; (statusSelect != 1 || invoiceLineList.length > 0))"
-                onChange="action-group-account-invoice-partner-onchange,action-method-invoice-address-str"
+                onChange="action-group-account-invoice-partner-onchange,action-method-invoice-address-str,action-gst-invoice-group-set-invoiceLines"
                 onSelect="action-invoice-method-set-partner-domain" form-view="partner-form"
                 grid-view="partner-grid" />
             <field name="contactPartner" colSpan="3" canEdit="false"
@@ -781,4 +781,13 @@ InvoiceSet.length > 0))"
             </field>
         </panel>
     </form>
+
+    <action-group name="action-gst-invoice-group-set-invoiceLines">
+        <action name="action-gst-invoice-method-set-invoiceLines"/>
+        <action name="action-invoice-group-invoice-line-onchange"/>
+    </action-group>
+    <action-method name="action-gst-invoice-method-set-invoiceLines"
+        if-module="axelor-gst">
+        <call class="com.axelor.apps.gst.web.InvoiceController" method="setInvoiceLines" />
+    </action-method>
 </object-views>
