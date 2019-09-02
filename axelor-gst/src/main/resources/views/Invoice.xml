@@ -3,9 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.1.xsd">
 
-    <kanban name="invoice-kanban" sequenceBy="priority"
-        model="com.axelor.apps.account.db.Invoice" columnBy="statusSelect" title="Invocies"
-        draggable="true">
+    <kanban name="invoice-kanban" title="Invoices" model="com.axelor.apps.account.db.Invoice"
+        columnBy="statusSelect" sequenceBy="priority" draggable="true" limit="10">
         <field name="invoiceId" />
         <field name="company" />
         <field name="partner" />
@@ -14,16 +13,15 @@
         <hilite color="success" if="priority == 0" />
         <hilite color="warning" if="priority >= 5" />
         <hilite color="info" if="priority > 0" />
-        <template>
-            <![CDATA[
-                <h4>{{invocieId}}</h4>
-                <div class="card-body">{{company.name}}<br>{{partner.fullName}}</div>
-                <div class="card-footer">
-                  <i class='fa fa-clock-o' ng-show="invoiceDate"></i> <span>{{invoiceDate|date:'yyyy-MM-dd'}}</span>
-                </div>
-            ]]>
-        </template>
+        <template><![CDATA[
+        	<h4>{{invoiceId}}</h4>
+         	<div class="card-body">{{company.name}}<br>{{partner.fullName}}</div>
+            <div class="card-footer">
+                <i class='fa fa-clock-o' ng-show="invoiceDate"></i> <span>{{invoiceDate|date:'yyyy-MM-dd'}}</span>
+            </div>
+      ]]></template>
     </kanban>
+
 
     <form name="invoice-form" title="Invoice" model="com.axelor.apps.account.db.Invoice"
         onNew="action-account-invoice-onnew-group" onLoad="action-account-invoice-onload-group"
@@ -782,9 +780,9 @@ InvoiceSet.length > 0))"
         </panel>
     </form>
 
-    <action-group name="action-gst-invoice-group-set-invoiceLines">
-        <action name="action-gst-invoice-method-set-invoiceLines"/>
-        <action name="action-invoice-group-invoice-line-onchange"/>
+    <action-group name="action-gst-invoice-group-set-invoiceLines" if-module="axelor-gst">
+        <action name="action-gst-invoice-method-set-invoiceLines" if="_ids"/>
+        <action name="action-invoice-group-invoice-line-onchange" if="_ids"/>
     </action-group>
     <action-method name="action-gst-invoice-method-set-invoiceLines"
         if-module="axelor-gst">

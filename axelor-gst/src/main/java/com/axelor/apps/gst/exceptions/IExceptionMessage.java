@@ -26,6 +26,8 @@ public interface IExceptionMessage {
 
   public static final String GST_TAX_LINE_ERROR = /*$$(*/
       "GST Tax configuration is missing for Product: %s (company: %s). So we are using Product GstRate" /*)*/;
-  public static final String Gst_ADDRESS_MESSAGE_1 = /*$$(*/ "Address is Missing" /*)*/;
-  public static final String Gst_ADDRESS_MESSAGE_2 = /*$$(*/ "State is Missing in Address" /*)*/;
+  public static final String GST_ADDRESS_MESSAGE_1 = /*$$(*/ "Address is Missing" /*)*/;
+  public static final String GST_ADDRESS_MESSAGE_2 = /*$$(*/ "State is Missing in Address" /*)*/;
+  public static final String GST_TAX_ACCOUNT_ERROR_1 = /*$$(*/
+      "Account Details are missing for Product: %s." /*)*/;
 }

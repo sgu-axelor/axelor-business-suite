@@ -78,12 +78,12 @@ public class GstInvoiceLineServiceImpl extends InvoiceLineProjectServiceImpl
       if (invoiceAddress == null || companyAddress == null) {
         throw new AxelorException(
             TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-            I18n.get(IExceptionMessage.Gst_ADDRESS_MESSAGE_1));
+            I18n.get(IExceptionMessage.GST_ADDRESS_MESSAGE_1));
       }
       if (invoiceAddress.getState() == null || companyAddress.getState() == null) {
         throw new AxelorException(
             TraceBackRepository.CATEGORY_CONFIGURATION_ERROR,
-            I18n.get(IExceptionMessage.Gst_ADDRESS_MESSAGE_2));
+            I18n.get(IExceptionMessage.GST_ADDRESS_MESSAGE_2));
       }
       if (invoiceAddress.getState() == companyAddress.getState()) {
         invoiceLine.setCgst(price.multiply(tax).divide(Two, 2, BigDecimal.ROUND_HALF_UP));

@@ -107,7 +107,7 @@
         model="com.axelor.apps.account.db.Invoice">
         <view type="form" name="invoice-form" />
         <view-param name="search-filters" value="customer-invoices-filters" />
-        <domain>self.operationTypeSelect = 3</domain>
+        <domain>self.operationTypeSelect = :_operationTypeSelect</domain>
         <context name="_operationTypeSelect" expr="eval:3" />
         <context name="todayDate" expr="eval:__config__.app.getTodayDate()" />
     </action-view>
@@ -121,50 +121,60 @@
         <view type="grid" name="invoice-grid" />
         <view type="form" name="invoice-form" />
         <view-param name="search-filters" value="customer-invoices-filters" />
-        <domain>self.operationTypeSelect = 3</domain>
+        <domain>self.operationTypeSelect = :_operationTypeSelect</domain>
         <context name="_operationTypeSelect" expr="eval:3" />
         <context name="todayDate" expr="eval:__config__.app.getTodayDate()" />
     </action-view>
 
-    <menuitem title="Canceled Invoices" name="menu-gst-root-invoice-all-canceledinvoice"
-        parent="menu-gst-root-invoice" action="gst.root.invoice.canceledinvoice" />
-    <action-view name="gst.root.invoice.canceledinvoice" title="Canceled Invocies">
-        <view type="grid" name="invoice-grid" />
-        <view type="form" name="invoice-form" />
+    <menuitem title="Draft Invoices" name="menu-gst-root-invoice-all-draftinvoice"
+        parent="menu-gst-root-invoice" action="gst.root.invoice.draftinvoice" />
+    <action-view name="gst.root.invoice.draftinvoice" title="Draft Invocies"
+        model="com.axelor.apps.account.db.Invoice">
+        <view name="invoice-grid" type="grid" />
+        <view name="invoice-form" type="form" />
         <view-param name="search-filters" value="customer-invoices-filters" />
-        <domain>self.operationTypeSelect = 3 and statusSelect = 4</domain>
+        <domain>self.operationTypeSelect = :_operationTypeSelect and self.statusSelect = :_status</domain>
+        <context name="_status" expr="eval: 1" />
         <context name="_operationTypeSelect" expr="eval:3" />
-        <context name="_canNew" expr="false" />
     </action-view>
 
     <menuitem title="Validated Invoices" name="menu-gst-root-invoice-all-validatedinvoice"
         parent="menu-gst-root-invoice" action="gst.root.invoice.validatedinvoice" />
-    <action-view name="gst.root.invoice.validatedinvoice" title="Validated Invocies">
-        <view type="grid" name="invoice-grid" />
-        <view type="form" name="invoice-form" />
+    <action-view name="gst.root.invoice.validatedinvoice" title="Validated Invocies"
+        model="com.axelor.apps.account.db.Invoice">
+        <view name="invoice-grid" type="grid" />
+        <view name="invoice-form" type="form" />
         <view-param name="search-filters" value="customer-invoices-filters" />
-        <domain>self.operationTypeSelect = 3 and statusSelect = 2</domain>
+        <domain>self.operationTypeSelect = :_operationTypeSelect and self.statusSelect = :_status</domain>
         <context name="_operationTypeSelect" expr="eval:3" />
+        <context name="_status" expr="eval: 2" />
     </action-view>
 
-    <menuitem title="Draft Invoices" name="menu-gst-root-invoice-all-draftinvoice"
-        parent="menu-gst-root-invoice" action="gst.root.invoice.draftinvoice" />
-    <action-view name="gst.root.invoice.draftinvoice" title="Draft Invocies">
-        <view type="grid" name="invoice-grid" />
-        <view type="form" name="invoice-form" />
-        <view-param name="search-filters" value="customer-invoices-filters" />
-        <domain>self.operationTypeSelect = 3 and statusSelect = 1</domain>
-        <context name="_operationTypeSelect" expr="eval:3" />
-    </action-view>
 
     <menuitem title="Valtilated Invoices" name="menu-gst-root-invoice-all-veltilateinvoice"
         parent="menu-gst-root-invoice" action="gst.root.invoice.veltilateinvoice" />
-    <action-view name="gst.root.invoice.veltilateinvoice" title="Ventilate Invocies">
-        <view type="grid" name="invoice-grid" />
-        <view type="form" name="invoice-form" />
+    <action-view name="gst.root.invoice.veltilateinvoice" title="Ventilate Invocies"
+        model="com.axelor.apps.account.db.Invoice">
+        <view name="invoice-grid" type="grid" />
+        <view name="invoice-form" type="form" />
         <view-param name="search-filters" value="customer-invoices-filters" />
-        <domain>self.operationTypeSelect = 3 and statusSelect = 3</domain>
+        <domain>self.operationTypeSelect = :_operationTypeSelect and self.statusSelect = :_status</domain>
         <context name="_operationTypeSelect" expr="eval:3" />
+        <context name="_status" expr="eval: 3" />
+    </action-view>
+
+
+    <menuitem title="Canceled Invoices" name="menu-gst-root-invoice-all-canceledinvoice"
+        parent="menu-gst-root-invoice" action="gst.root.invoice.canceledinvoice" />
+    <action-view name="gst.root.invoice.canceledinvoice" title="Canceled Invocies"
+        model="com.axelor.apps.account.db.Invoice">
+        <view name="invoice-grid" type="grid" />
+        <view name="invoice-form" type="form" />
+        <view-param name="search-filters" value="customer-invoices-filters" />
+        <domain>self.operationTypeSelect = :_operationTypeSelect and self.statusSelect = :_status</domain>
+        <context name="_operationTypeSelect" expr="eval:3" />
+        <context name="_status" expr="eval: 4" />
+        <context name="_canNew" expr="false" />
     </action-view>
 
     <menuitem name="menu-gst-root-reporting" parent="menu-gst-root" title="Reporting"

@@ -3,6 +3,7 @@ package com.axelor.apps.gst.module;
 import com.axelor.app.AxelorModule;
 import com.axelor.apps.account.service.AccountManagementServiceAccountImpl;
 import com.axelor.apps.account.service.invoice.print.InvoicePrintServiceImpl;
+import com.axelor.apps.account.service.move.MoveLineService;
 import com.axelor.apps.base.service.tax.FiscalPositionService;
 import com.axelor.apps.base.service.tax.FiscalPositionServiceImpl;
 import com.axelor.apps.businessproject.service.InvoiceLineProjectServiceImpl;
@@ -14,6 +15,7 @@ import com.axelor.apps.gst.service.GstInvoiceServiceImpl;
 import com.axelor.apps.gst.service.InvoiceService;
 import com.axelor.apps.gst.service.InvoiceServiceImpl;
 import com.axelor.apps.gst.service.invoice.print.GstInvoicePrintServiceImpl;
+import com.axelor.apps.gst.service.move.GstMoveLineService;
 
 public class GstModule extends AxelorModule {
 
@@ -26,5 +28,6 @@ public class GstModule extends AxelorModule {
     bind(InvoiceServiceProjectImpl.class).to(GstInvoiceServiceImpl.class);
     bind(InvoicePrintServiceImpl.class).to(GstInvoicePrintServiceImpl.class);
     bind(InvoiceService.class).to(InvoiceServiceImpl.class);
+    bind(MoveLineService.class).to(GstMoveLineService.class);
   }
 }

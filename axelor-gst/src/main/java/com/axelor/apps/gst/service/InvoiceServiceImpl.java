@@ -1,17 +1,14 @@
 package com.axelor.apps.gst.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.axelor.apps.account.db.Invoice;
 import com.axelor.apps.account.db.InvoiceLine;
 import com.axelor.apps.account.service.invoice.InvoiceLineServiceImpl;
-import com.axelor.apps.account.service.invoice.generator.InvoiceLineGenerator;
 import com.axelor.apps.base.db.Product;
 import com.axelor.apps.base.db.repo.ProductRepository;
 import com.axelor.exception.AxelorException;
 import com.google.inject.Inject;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class InvoiceServiceImpl implements InvoiceService {
 

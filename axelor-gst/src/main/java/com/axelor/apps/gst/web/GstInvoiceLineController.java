@@ -17,7 +17,7 @@ public class GstInvoiceLineController {
 
   public void compute(ActionRequest request, ActionResponse response) throws AxelorException {
 
-    if (Beans.get(AppService.class).isApp("gst")) {
+    if (Beans.get(AppService.class).isApp("gst") && request.getContext().get("product")!=null) {
 
       Context context = request.getContext();
 
