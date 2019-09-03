@@ -1,40 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <object-views xmlns="http://axelor.com/xml/ns/object-views"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://axelor.com/xml/ns/object-views http://axelor.com/xml/ns/object-views/object-views_5.0.xsd">
 
-	<chart name="chart.customers.per.state" title="Cutomers in States">
-		<dataset type="sql">
+    <chart name="chart.customers.per.state" title="Cutomers in States">
+        <dataset type="sql">
     <![CDATA[
-			select 
-                count(Partner.id) as count,
-                Address.state as state
-            from 
-                base_partner Partner 
-            inner join 
-                base_partner_address PartnerAddress 
-            on 
-                Partner.id = PartnerAddress.partner 
-            inner join 
-                base_address Address 
-            on 
-                PartnerAddress.address = Address.id
-            where 
-                Partner.is_customer = 't' 
-            group by Address.state
+		  select 
+              count(Partner.id) as count,
+              State.name as state
+          from 
+              base_partner Partner 
+          left join 
+              base_partner_address PartnerAddress 
+          on 
+              Partner.id = PartnerAddress.partner 
+          left join 
+              base_address Address 
+          on 
+              PartnerAddress.address = Address.id
+          left join
+              base_state State
+          on
+              Address.state = State.id
+          where 
+              Partner.is_customer = 't' 
+          group by State.name
     ]]>
     </dataset>
-		<category key="state" />
-		<series key="count" type="pie" />
-	</chart>
-	
-	<chart name="chart.unpaid.invoices.per.cutomer" title="Unpaid Invoices per Customer"
-		onInit="action-cahrts-attrs-set-defaults">
-		<search-fields>
-			<field type="date" name="fromDate" title="From Date" />
-			<field type="date" name="toDate" title="To Date" />
-		</search-fields>
-		<dataset type="jpql">
+        <category key="state" />
+        <series key="count" type="pie" />
+    </chart>
+
+    <chart name="chart.unpaid.invoices.per.cutomer" title="Unpaid Invoices per Customer"
+        onInit="action-cahrts-attrs-set-defaults">
+        <search-fields>
+            <field type="date" name="fromDate" title="From Date" />
+            <field type="date" name="toDate" title="To Date" />
+        </search-fields>
+        <dataset type="jpql">
     <![CDATA[
 	    SELECT
 	        count(self) as invoices,
@@ -45,24 +49,24 @@
 	    	self.partner as _party
 	    WHERE
 	    	_party.isCustomer = 't' AND
-	    	self.statusSelect != '4' AND
+	    	self.statusSelect in (1,2) AND
 	    	self.invoiceDate > :fromDate AND
 	    	self.invoiceDate < :toDate
 	    GROUP BY
 	    	_party.fullName
     ]]>
     </dataset>
-		<category key="customer" />
-		<series key="invoices" type="bar" />
-	</chart>
+        <category key="customer" />
+        <series key="invoices" type="bar" />
+    </chart>
 
-	<chart name="chart.paid.invoices.per.category.per.product"
-		title="Paid Invoices per Category per product" onInit="action-cahrts-attrs-set-defaults">
-		<search-fields>
-			<field type="date" name="fromDate" title="From Date" />
-			<field type="date" name="toDate" title="To Date" />
-		</search-fields>
-		<dataset type="sql">
+    <chart name="chart.paid.invoices.per.category.per.product"
+        title="Paid Invoices per Category per product" onInit="action-cahrts-attrs-set-defaults">
+        <search-fields>
+            <field type="date" name="fromDate" title="From Date" />
+            <field type="date" name="toDate" title="To Date" />
+        </search-fields>
+        <dataset type="sql">
     <![CDATA[
             select 
             	count(inv.id) as invoices, 
@@ -83,53 +87,69 @@
             on  
             	pd.product_category = pdc.id
             where 
-            	inv.status_select = '4' and
+            	inv.status_select = '3' and
             	DATE(inv.invoice_date) > DATE(:fromDate) AND
             	DATE(inv.invoice_date) < DATE(:toDate)
             group by 
             	pdc.name, pd.name
     ]]>
     </dataset>
-		<category key="product" />
-		<series key="invoices" type="bar" />
-	</chart>
+        <category key="product" />
+        <series key="invoices" type="bar" />
+    </chart>
 
-	<action-attrs name="action-cahrts-attrs-set-defaults">
-		<attribute name="value" for="toDate" expr="eval: __date__" />
-		<attribute name="value" for="fromDate" expr="eval: __date__.withDayOfMonth(1)" />
-	</action-attrs>
+    <action-attrs name="action-cahrts-attrs-set-defaults">
+        <attribute name="value" for="toDate" expr="eval: __date__" />
+        <attribute name="value" for="fromDate" expr="eval: __date__.withDayOfMonth(1)" />
+    </action-attrs>
 
 
-	<chart name="chart.amount.per.status" title="Amount per Status">
-		<dataset type="jpql">
-    <![CDATA[
-	    SELECT
-	        sum(self.inTaxTotal) AS amount,
-	        self.statusSelect as status
-	    FROM
-	        Invoice self
-	    GROUP BY
-	        self.statusSelect
-    ]]>
-    </dataset>
-		<category key="status"/>
-		<series key="amount" type="bar" />
-	</chart>
-	<chart name="chart.invoiceline.per.status" title="InvoiceLine per Status">
-		<dataset type="jpql">
+    <chart name="chart.amount.per.status" title="Amount per Status">
+        <dataset type="sql">
+        <![CDATA[
+            SELECT
+                sum(self.in_tax_total) AS amount,
+                selection_item.title as status,
+        		base_currency.code as currency
+            FROM
+                account_invoice self
+        	LEFT JOIN
+        		base_currency on base_currency.id = self.currency
+            LEFT JOIN
+                meta_select as selection ON selection.name = 'iaccount.invoice.status.select'
+            LEFT JOIN 
+           	    meta_select_item as selection_item ON selection_item.select_id = selection.id
+        	Where 
+                self.status_select = CAST(selection_item.value as Integer)
+            GROUP BY
+                selection_item.title, base_currency.code
+
+        ]]>
+        </dataset>
+        <category key="status" type="text" />
+        <series key="amount" groupBy="currency" type="bar" />
+    </chart>
+    <chart name="chart.invoiceline.per.status" title="InvoiceLine per Status">
+        <dataset type="sql">
     <![CDATA[
 	    select 
-	    	sum(self.inTaxTotal) AS amount,	
+	    	sum(self.in_tax_total) AS amount,	
 	  	  	count(self) as invoices, 
-	  	  	self.statusSelect as status
-		from 
-			Invoice self 
-		group by 
-			self.statusSelect
+	  	  	selection_item.title as status
+		FROM
+	        account_invoice self
+        LEFT JOIN
+            meta_select as selection ON selection.name = 'iaccount.invoice.status.select'
+        LEFT JOIN 
+            meta_select_item as selection_item ON selection_item.select_id = selection.id
+        where 
+            self.status_select = CAST(selection_item.value as Integer)
+	    GROUP BY
+	        selection_item.title
     ]]>
     </dataset>
-		<category key="invoices" type="number" />
-		<series key="amount" groupBy="status" type="line" />
-	</chart>
+        <category key="invoices" type="number" />
+        <series key="amount" groupBy="status" type="line" />
+    </chart>
 
 </object-views>
