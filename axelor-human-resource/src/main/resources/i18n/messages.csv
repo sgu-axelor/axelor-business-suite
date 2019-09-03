@@ -151,6 +151,7 @@
 "Deduct lunch voucher",,,
 "Default Activity Product",,,
 "Default day number gain",,,
+"Department",,,
 "Department of birth",,,
 "Description",,,
 "Details",,,
@@ -890,3 +891,4 @@
 "value:Extra hours",,,
 "value:Leave Management",,,
 "value:Timesheet Management",,,
+"{{ ""HR manager"" }}",,,

@@ -36,7 +36,8 @@ public class GstAccountManagementServiceImpl extends AccountManagementServiceAcc
     if (Beans.get(AppService.class).isApp("gst")
         && accountManagements != null
         && !accountManagements.isEmpty()
-        && accountManagements.get(0).getProduct() != null) {
+        && (accountManagements.get(0).getProduct() != null
+            || accountManagements.get(0).getProductFamily() != null)) {
       for (AccountManagement accountManagement1 : accountManagements) {
         if (accountManagement1.getCompany().equals(company)) {
           if (accountManagement1.getSaleTax() != null

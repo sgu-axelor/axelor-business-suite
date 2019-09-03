@@ -151,6 +151,7 @@
 "Deduct lunch voucher","Déduire Tickets Restaurant",,
 "Default Activity Product","Produit pour les temps passés",,
 "Default day number gain","Gain en jour de congé par défaut",,
+"Department",,,
 "Department of birth","Département de naissance",,
 "Description","Description",,
 "Details","Détails",,
@@ -890,3 +891,4 @@
 "value:Extra hours","Heures supplémentaires",,
 "value:Leave Management","Gestion des congés",,
 "value:Timesheet Management","Feuilles de temps",,
+"{{ ""HR manager"" }}",,,
