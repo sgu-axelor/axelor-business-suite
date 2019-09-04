@@ -3,7 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://axelor.com/xml/ns/domain-models http://axelor.com/xml/ns/domain-models/domain-models_5.1.xsd">
   
-  <module package="com.axelor.apps.base.db" name="base"/>
+  <module package="com.axelor.apps.gst.db" name="gst"/>
   
   <entity name="State" lang="java">
   	<string name="name" required="true" title="State"/>

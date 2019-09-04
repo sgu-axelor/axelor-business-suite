@@ -58,7 +58,7 @@
     <menuitem title="States" name="menu-gst-root-party-configuration-state"
         parent="menu-gst-root-party-configuration" action="gst.root.party.config.state" />
     <action-view name="gst.root.party.config.state" title="States"
-        model="com.axelor.apps.base.db.State">
+        model="com.axelor.apps.gst.db.State">
         <view type="grid" name="gst-state-grid" />
         <view type="form" name="gst-state-form" />
     </action-view>
