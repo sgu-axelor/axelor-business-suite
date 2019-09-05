@@ -1,0 +1,3 @@
+importId,partnerTypeSelect,isContact,isCustomer,isSupplier,isEmployee,name,firstName,titleSelect,languageCode,address,email,fixedPhone,mobilePhone,invoiceSendingFormatSelect,paymentMode.importId,paymentCondition.importId,partnerCategory.code,currency.code,blockingList.importId,rejectCounter,companySet_importId,customerAccount_code,supplierAccount_code,mainPartner_importId,customerTypeSelect,supplierTypeSelect,industrySector.importId,user.importId,team.importId,source.id,fiscalPosition.importId,picture_fileName,invoicesCopySelect,gstin
+601,1,false,true,true,false,SRS Brothers,,,en,602,care@srs.com,9045,8923,emailpaper,1,6,,INR,,,1,,,,,,,,,,,,1,ABCDEFGHI112345
+602,2,true,false,false,false,Shivank Gupta,Shivank,1,en,602,Shivank@srs.com,89237,,,,,,,,,1,,,601,,,,,,,,,1,

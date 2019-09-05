@@ -246,4 +246,6 @@ public class MoveController {
       response.setValue("moveLineList", move.getMoveLineList());
     }
   }
+  
+ 
 }

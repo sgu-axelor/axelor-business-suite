@@ -33,7 +33,7 @@ public class GstAccountManagementServiceImpl extends AccountManagementServiceAcc
   public AccountManagement getAccountManagement(
       List<AccountManagement> accountManagements, Company company) {
     AccountManagement accountManagement = super.getAccountManagement(accountManagements, company);
-    Boolean isAccountMng =false;
+    Boolean isAccountMng = false;
     if (Beans.get(AppService.class).isApp("gst")
         && accountManagements != null
         && !accountManagements.isEmpty()
@@ -44,12 +44,12 @@ public class GstAccountManagementServiceImpl extends AccountManagementServiceAcc
           if (accountManagement1.getSaleTax() != null
               && accountManagement1.getSaleTax().getCode().equals(GSTCODE)) {
             accountManagement = accountManagement1;
-            isAccountMng= true;
+            isAccountMng = true;
             break;
           }
         }
       }
-      if(!isAccountMng) {
+      if (!isAccountMng) {
         accountManagement = null;
       }
     }
