@@ -52,7 +52,7 @@
                     <field name="period" form-view="period-form" grid-view="period-grid" canEdit="false" canView="false"/>
                     <field name="date" onChange="action-move-method-get-period" hideIf="statusSelect == 3"/>
                 </panel>
-                <field name="partner" domain="self.isContact = false AND :company MEMBER OF self.companySet" colSpan="12" canNew="false" canEdit="false" form-view="partner-form" grid-view="partner-grid"/>
+                <field name="partner" domain="self.isContact = false AND :company MEMBER OF self.companySet" colSpan="12" canNew="false" canEdit="false" form-view="partner-form" grid-view="partner-grid" onSelect="action-accounts-move-method-set-partner-domain"/>
             </panel>
 
             <panel name="otherDetailsPanel" colSpan="3">
@@ -307,6 +307,10 @@
 	<action-method name="action-account-move-method-automatic-taxline-generation">
 		<call class="com.axelor.apps.account.web.MoveController" method="autoTaxLineGenerate"/>
 	</action-method>
+    
+    <action-method name="action-accounts-move-method-set-partner-domain">
+        <call class= "com.axelor.apps.account.web.MoveController" method="domainSetPartner"/>
+    </action-method>
 
 	<!-- ACTION VIEW -->
 	<action-view name="action-move-view-open-generate-reverse-wizard" title="Generate Reverse Move" model="com.axelor.apps.account.db.Move">

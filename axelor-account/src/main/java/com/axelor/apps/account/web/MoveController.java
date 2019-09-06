@@ -40,6 +40,7 @@ import com.axelor.rpc.ActionResponse;
 import com.axelor.rpc.Context;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -246,6 +247,37 @@ public class MoveController {
       response.setValue("moveLineList", move.getMoveLineList());
     }
   }
-  
- 
+
+  public void domainSetPartner(ActionRequest request, ActionResponse response) {
+    Move move = request.getContext().asType(Move.class);
+    String domain = "";
+    String compatiblePartners = move.getJournal().getCompatiblePartner();
+    if (compatiblePartners != null) {
+      List<String> partnerTypes = Arrays.asList(compatiblePartners.split(", "));
+      for (String s : partnerTypes) {
+        switch (s) {
+          case "1":
+            domain += "isProspect = true AND ";
+            break;
+          case "2":
+            domain += "isCustomer = true AND ";
+            break;
+          case "3":
+            domain += "isSupplier = true AND ";
+            break;
+          case "4":
+            domain += "isCarrier = true AND ";
+            break;
+          case "5":
+            domain += "isFactor = true AND ";
+            break;
+          default:
+            domain += "isCustomer = false AND ";
+            break;
+        }
+      }
+    }
+    domain += ":company MEMBER OF self.companySet";
+    response.setAttr("partner", "domain", domain);
+  }
 }

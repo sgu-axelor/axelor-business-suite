@@ -25,6 +25,8 @@
   	<many-to-many name="validAccountTypeSet" ref="com.axelor.apps.account.db.AccountType" title="Compatible Account Types"/>
   	<many-to-many name="validAccountSet" ref="com.axelor.apps.account.db.Account" title="Compatible Accounts"/>
 
+    <string name="compatiblePartner" selection="account.jornal.compatiblePartner.select"/>
+    
 	<unique-constraint columns="company,code,name"/>
   	
   	 <extra-code><![CDATA[

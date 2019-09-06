@@ -414,4 +414,12 @@
 		<option value="1">Draft</option>
 		<option value="2">Validated</option>
 	</selection>
+    
+    <selection name="account.jornal.compatiblePartner.select">
+        <option value="1">Prospect</option>
+        <option value="2">Customer</option>
+        <option value="3">Supplier</option>
+        <option value="4">Carrier</option>
+        <option value="5">Factor</option>
+    </selection>
 </object-views>
